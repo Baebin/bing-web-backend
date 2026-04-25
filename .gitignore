@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Database Configuration ###
+src/main/resources/application-db.properties
