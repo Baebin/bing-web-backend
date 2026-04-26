@@ -39,5 +39,8 @@ out/
 ### DB Configuration ###
 /src/main/resources/application-db.properties
 
+### SMTP Configuration ###
+/src/main/resources/application-smtp.properties
+
 ### Seucurity Configuration ###
 /src/main/resources/application-security.properties
