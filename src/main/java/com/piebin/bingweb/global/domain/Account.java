@@ -2,6 +2,7 @@ package com.piebin.bingweb.global.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.piebin.bingweb.global.converter.StringListConverter;
+import com.piebin.bingweb.global.entity.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -26,13 +27,16 @@ public class Account {
     @Column(unique = true, nullable = false)
     private String id;
 
+    @Column(unique = true, nullable = false)
+    private String email;
+
     @JsonIgnore
     @Column(nullable = false)
     private String password;
 
     @Convert(converter = StringListConverter.class)
     @Builder.Default
-    private List<String> roles = new ArrayList<>();
+    private List<String> roles = new ArrayList<>(List.of(UserRole.USER.getKey()));
 
     @CreatedDate
     @Column(name = "reg_date", updatable = false)
