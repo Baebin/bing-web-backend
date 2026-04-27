@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class CustomExceptionHandler {
     @ExceptionHandler(CustomException.class)
-    protected ResponseEntity<ExceptionResponseDto> handleCustomException(CustomException e) {
+    protected ResponseEntity<ExceptionResponse> handleCustomException(CustomException e) {
         return ResponseEntity
                 .status(e.getErrorCode().getStatus())
-                .body(ExceptionResponseDto.from(e));
+                .body(ExceptionResponse.from(e));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -24,16 +24,16 @@ public class CustomExceptionHandler {
         String message = result.getAllErrors().get(0).getDefaultMessage();
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(ExceptionResponseDto.of(HttpStatus.BAD_REQUEST, message));
+                .body(ExceptionResponse.of(HttpStatus.BAD_REQUEST, message));
     }
 
     @ExceptionHandler(Exception.class)
-    protected ResponseEntity<ExceptionResponseDto> handleException(Exception e) {
+    protected ResponseEntity<ExceptionResponse> handleException(Exception e) {
         log.error("Unhandled Exception 발생: {}", e.getMessage());
 
         GlobalException exception = GlobalException.SERVER_ERROR;
         return ResponseEntity
                 .status(exception.getStatus())
-                .body(ExceptionResponseDto.from(exception));
+                .body(ExceptionResponse.from(exception));
     }
 }
