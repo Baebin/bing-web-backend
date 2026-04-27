@@ -1,6 +1,6 @@
 package com.piebin.bingweb.global.exception;
 
-import lombok.AllArgsConstructor;
+import com.piebin.bingweb.global.annotation.BingDateTimeFormat;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
@@ -11,6 +11,7 @@ public class ExceptionResponseDto {
     private final String code;
     private final int status;
     private final String message;
+    @BingDateTimeFormat
     private final LocalDateTime timestamp;
 
     private ExceptionResponseDto(String code, int status, String message) {
