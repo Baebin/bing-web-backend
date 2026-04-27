@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public record AccountResponse(
         String id,
+        String nickname,
         String email,
         @BingDateTimeFormat
         LocalDateTime regDate
@@ -19,6 +20,7 @@ public record AccountResponse(
     public static AccountResponse from(Account account) {
         return AccountResponse.builder()
                 .id(account.getId())
+                .nickname(account.getNickname())
                 .email(account.getEmail())
                 .regDate(account.getRegDate())
                 .build();

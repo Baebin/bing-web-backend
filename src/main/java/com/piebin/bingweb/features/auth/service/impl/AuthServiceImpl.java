@@ -29,10 +29,13 @@ public class AuthServiceImpl implements AuthService {
     public void signUp(SignUpRequest request) {
         if (accountRepository.existsById(request.getId()))
             throw new CustomException(AuthException.DUPLICATE_ID);
+        if (accountRepository.existsById(request.getId()))
+            throw new CustomException(AuthException.DUPLICATE_NICKNAME);
         if (accountRepository.existsByEmail(request.getEmail()))
             throw new CustomException(AuthException.DUPLICATE_EMAIL);
         Account account = Account.builder()
                 .id(request.getId())
+                .nickname(request.getNickname())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .build();
