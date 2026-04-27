@@ -2,6 +2,7 @@ package com.piebin.bingweb.features.auth.service.impl;
 
 import com.piebin.bingweb.features.auth.dto.request.LoginRequest;
 import com.piebin.bingweb.features.auth.dto.request.SignUpRequest;
+import com.piebin.bingweb.features.auth.dto.response.AccountResponse;
 import com.piebin.bingweb.features.auth.exception.AuthException;
 import com.piebin.bingweb.features.auth.service.AuthService;
 import com.piebin.bingweb.global.domain.Account;
@@ -9,6 +10,7 @@ import com.piebin.bingweb.global.dto.response.TokenResponse;
 import com.piebin.bingweb.global.exception.CustomException;
 import com.piebin.bingweb.global.repository.AccountRepository;
 import com.piebin.bingweb.global.security.JwtProvider;
+import com.piebin.bingweb.global.security.SecurityAccount;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -50,5 +52,13 @@ public class AuthServiceImpl implements AuthService {
                 .accessToken(accessToken)
                 .expiresIn(jwtProvider.getExpirationSeconds())
                 .build();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public AccountResponse getMyProfile(SecurityAccount securityAccount) {
+        if (securityAccount == null)
+            throw new CustomException(AuthException.UNAUTHORIZED);
+        return AccountResponse.from(securityAccount.account());
     }
 }
