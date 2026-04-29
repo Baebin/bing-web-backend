@@ -1,5 +1,7 @@
 package com.piebin.bingweb.global.security;
 
+import com.piebin.bingweb.features.auth.exception.AuthException;
+import com.piebin.bingweb.global.exception.CustomException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -46,8 +48,12 @@ public class JwtProvider {
         try {
             Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token);
             return true;
+        } catch (io.jsonwebtoken.ExpiredJwtException e) {
+            throw new CustomException(AuthException.EXPIRED_TOKEN);
+        } catch (io.jsonwebtoken.security.SignatureException | io.jsonwebtoken.MalformedJwtException e) {
+            throw new CustomException(AuthException.INVALID_TOKEN);
         } catch (Exception e) {
-            return false;
+            throw new CustomException(AuthException.UNAUTHORIZED);
         }
     }
 }

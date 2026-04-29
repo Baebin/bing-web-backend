@@ -1,4 +1,4 @@
-package com.piebin.bingweb.features.auth.dto.response;
+package com.piebin.bingweb.features.account.dto.response;
 
 import com.piebin.bingweb.global.annotation.BingDateTimeFormat;
 import com.piebin.bingweb.global.domain.Account;
