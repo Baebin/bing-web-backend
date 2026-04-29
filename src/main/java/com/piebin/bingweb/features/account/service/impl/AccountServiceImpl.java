@@ -1,5 +1,6 @@
 package com.piebin.bingweb.features.account.service.impl;
 
+import com.piebin.bingweb.features.account.dto.request.BioUpdateRequest;
 import com.piebin.bingweb.features.account.dto.request.NicknameUpdateRequest;
 import com.piebin.bingweb.features.account.dto.response.AccountResponse;
 import com.piebin.bingweb.features.account.exception.AccountException;
@@ -32,5 +33,13 @@ public class AccountServiceImpl implements AccountService {
             if (accountRepository.existsByNickname(request.getNickname()))
                 throw new CustomException(AccountException.DUPLICATE_NICKNAME);
         account.setNickname(request.getNickname());
+    }
+
+    @Override
+    @Transactional
+    public void updateBio(SecurityAccount securityAccount, BioUpdateRequest request) {
+        Account account = accountRepository.findByIdx(securityAccount.account().getIdx())
+                .orElseThrow(() -> new CustomException(AccountException.USER_NOT_FOUND));
+        account.setBio(request.getBio());
     }
 }

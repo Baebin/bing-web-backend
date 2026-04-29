@@ -1,5 +1,6 @@
 package com.piebin.bingweb.features.account.controller;
 
+import com.piebin.bingweb.features.account.dto.request.BioUpdateRequest;
 import com.piebin.bingweb.features.account.dto.request.NicknameUpdateRequest;
 import com.piebin.bingweb.features.account.dto.response.AccountResponse;
 import com.piebin.bingweb.features.account.service.AccountService;
@@ -27,6 +28,14 @@ public class AccountController {
             @AuthenticationPrincipal SecurityAccount securityAccount,
             @RequestBody @Valid NicknameUpdateRequest request) {
         accountService.updateNickname(securityAccount, request);
+        return ResponseEntity.ok(true);
+    }
+
+    @PatchMapping("/me/bio")
+    public ResponseEntity<Boolean> updateBio(
+            @AuthenticationPrincipal SecurityAccount securityAccount,
+            @RequestBody @Valid BioUpdateRequest request) {
+        accountService.updateBio(securityAccount, request);
         return ResponseEntity.ok(true);
     }
 }
