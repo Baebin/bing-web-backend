@@ -1,8 +1,13 @@
-package com.piebin.bingweb.global.security;
+package com.piebin.bingweb.global.config;
 
+import com.piebin.bingweb.global.security.CustomAuthenticationEntryPoint;
+import com.piebin.bingweb.global.security.JwtAuthenticationFilter;
+import com.piebin.bingweb.global.security.JwtProvider;
+import com.piebin.bingweb.global.security.SecurityAccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -18,10 +23,12 @@ import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(securedEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtProvider jwtProvider;
     private final SecurityAccountService securityAccountService;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) {
@@ -30,8 +37,12 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/**").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/accounts/**").authenticated()
+                        .anyRequest().permitAll()
+                )
+                .exceptionHandling(handler -> handler
+                        .authenticationEntryPoint(customAuthenticationEntryPoint)
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider, securityAccountService),
                         UsernamePasswordAuthenticationFilter.class);
