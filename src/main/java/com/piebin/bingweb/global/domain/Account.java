@@ -37,6 +37,10 @@ public class Account {
     @Column(nullable = false)
     private String password;
 
+    // Biography
+    @Column(length = 300)
+    private String bio = "";
+
     @Convert(converter = StringListConverter.class)
     @Builder.Default
     private List<String> roles = new ArrayList<>(List.of(UserRole.USER.getKey()));
