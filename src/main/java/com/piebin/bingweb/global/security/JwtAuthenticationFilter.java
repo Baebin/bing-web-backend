@@ -1,5 +1,6 @@
 package com.piebin.bingweb.global.security;
 
+import com.piebin.bingweb.global.exception.CustomException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,19 +23,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+        try {
+            String token = resolveToken(request);
+            if (token != null && jwtProvider.validateToken(token)) {
+                String id = jwtProvider.getId(token);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(id);
 
-        String token = resolveToken(request);
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
-        if (token != null && jwtProvider.validateToken(token)) {
-            String id = jwtProvider.getId(token);
-            UserDetails userDetails = userDetailsService.loadUserByUsername(id);
-
-            UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+        } catch (CustomException e) {
+            request.setAttribute("exception", e.getErrorCode());
         }
-
         filterChain.doFilter(request, response);
     }
 
