@@ -7,9 +7,12 @@ import com.piebin.bingweb.features.account.service.AccountService;
 import com.piebin.bingweb.global.security.SecurityAccount;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/accounts")
@@ -21,6 +24,20 @@ public class AccountController {
     public ResponseEntity<AccountResponse> getMyProfile(
             @AuthenticationPrincipal SecurityAccount securityAccount) {
         return ResponseEntity.ok(accountService.getMyProfile(securityAccount));
+    }
+
+    @GetMapping("/me/avatar")
+    public ResponseEntity<Resource> getMyAvatar(
+            @AuthenticationPrincipal SecurityAccount securityAccount) {
+        return accountService.getMyAvatar(securityAccount);
+    }
+
+    @PatchMapping(value = "/me/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Boolean> updateAvatar(
+            @AuthenticationPrincipal SecurityAccount securityAccount,
+            @RequestPart("file") MultipartFile file) {
+        accountService.updateAvatar(securityAccount, file);
+        return ResponseEntity.ok(true);
     }
 
     @PatchMapping("/me/nickname")
