@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public record AccountResponse(
         String id,
+        Long idx,
         String nickname,
         String email,
         String bio,
@@ -25,6 +26,7 @@ public record AccountResponse(
                 : account.getIdx() + "번째 빙구단원";
         return AccountResponse.builder()
                 .id(account.getId())
+                .idx(account.getIdx())
                 .nickname(account.getNickname())
                 .email(account.getEmail())
                 .bio(bio)

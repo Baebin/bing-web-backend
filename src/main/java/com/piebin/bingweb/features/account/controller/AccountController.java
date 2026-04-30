@@ -32,6 +32,11 @@ public class AccountController {
         return accountService.getMyAvatar(securityAccount);
     }
 
+    @GetMapping("/{idx}/avatar")
+    public ResponseEntity<Resource> getAvatar(@PathVariable Long idx) {
+        return accountService.getAvatar(idx);
+    }
+
     @PatchMapping(value = "/me/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Boolean> updateAvatar(
             @AuthenticationPrincipal SecurityAccount securityAccount,

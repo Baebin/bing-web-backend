@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 public interface AccountService {
     AccountResponse getMyProfile(SecurityAccount securityAccount);
     ResponseEntity<Resource> getMyAvatar(SecurityAccount securityAccount);
+    ResponseEntity<Resource> getAvatar(Long idx);
 
     void updateAvatar(SecurityAccount securityAccount, MultipartFile file);
 

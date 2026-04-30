@@ -38,6 +38,12 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public ResponseEntity<Resource> getAvatar(Long idx) {
+        return fileService.downloadResponse(buildAvatarDto(idx));
+    }
+
+    @Override
     @Transactional
     public void updateAvatar(SecurityAccount securityAccount, MultipartFile file) {
         fileService.upload(file, buildAvatarDto(securityAccount.account()));
@@ -62,10 +68,14 @@ public class AccountServiceImpl implements AccountService {
         account.updateBio(request.getBio());
     }
 
-    private FileDto buildAvatarDto(Account account) {
+    private FileDto buildAvatarDto(Long idx) {
         return FileDto.builder()
-                .path("profiles/" + account.getIdx())
+                .path("profiles/" + idx)
                 .name("avatar")
                 .build();
+    }
+
+    private FileDto buildAvatarDto(Account account) {
+        return buildAvatarDto(account.getIdx());
     }
 }
