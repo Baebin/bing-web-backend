@@ -51,7 +51,7 @@ public class AccountServiceImpl implements AccountService {
         if (!account.getNickname().equalsIgnoreCase(request.getNickname()))
             if (accountRepository.existsByNickname(request.getNickname()))
                 throw new CustomException(AccountException.DUPLICATE_NICKNAME);
-        account.setNickname(request.getNickname());
+        account.updateNickname(request.getNickname());
     }
 
     @Override
@@ -59,7 +59,7 @@ public class AccountServiceImpl implements AccountService {
     public void updateBio(SecurityAccount securityAccount, BioUpdateRequest request) {
         Account account = accountRepository.findByIdx(securityAccount.account().getIdx())
                 .orElseThrow(() -> new CustomException(AccountException.USER_NOT_FOUND));
-        account.setBio(request.getBio());
+        account.updateBio(request.getBio());
     }
 
     private FileDto buildAvatarDto(Account account) {

@@ -13,10 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "accounts")
 @Getter
-@Setter
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class Account {
@@ -48,4 +48,12 @@ public class Account {
     @CreatedDate
     @Column(name = "reg_date", updatable = false)
     private LocalDateTime regDate;
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void updateBio(String bio) {
+        this.bio = bio;
+    }
 }
