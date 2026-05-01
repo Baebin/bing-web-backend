@@ -41,6 +41,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/accounts/{idx}/**").permitAll()
                         .requestMatchers("/api/accounts/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/posts/{idx}/**").permitAll()
+                        .requestMatchers("/api/posts/**").authenticated()
                         .anyRequest().permitAll()
                 )
                 .exceptionHandling(handler -> handler
