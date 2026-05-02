@@ -4,8 +4,8 @@ import com.piebin.bingweb.features.account.exception.AccountException;
 import com.piebin.bingweb.features.post.common.PostType;
 import com.piebin.bingweb.features.post.domain.Post;
 import com.piebin.bingweb.features.post.dto.internal.PostDto;
-import com.piebin.bingweb.features.post.dto.response.PostListResponse;
 import com.piebin.bingweb.features.post.dto.response.PostResponse;
+import com.piebin.bingweb.features.post.dto.response.PostWithPagingResponse;
 import com.piebin.bingweb.features.post.exception.PostException;
 import com.piebin.bingweb.features.post.repository.PostRepository;
 import com.piebin.bingweb.features.post.service.PostService;
@@ -19,8 +19,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -54,11 +52,9 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<PostListResponse> getList(PostType type, int page, int size) {
+    public PostWithPagingResponse getList(PostType type, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("idx").descending());
         Page<Post> postPage = postRepository.findAllByType(type, pageable);
-        return postPage.getContent().stream()
-                .map(PostListResponse::from)
-                .toList();
+        return PostWithPagingResponse.from(postPage);
     }
 }

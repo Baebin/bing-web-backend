@@ -2,8 +2,8 @@ package com.piebin.bingweb.features.post.controller;
 
 import com.piebin.bingweb.features.post.common.PostType;
 import com.piebin.bingweb.features.post.dto.request.PostRequest;
-import com.piebin.bingweb.features.post.dto.response.PostListResponse;
 import com.piebin.bingweb.features.post.dto.response.PostResponse;
+import com.piebin.bingweb.features.post.dto.response.PostWithPagingResponse;
 import com.piebin.bingweb.features.post.service.CommunityService;
 import com.piebin.bingweb.features.post.service.PostService;
 import com.piebin.bingweb.global.security.SecurityAccount;
@@ -12,8 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -41,7 +39,7 @@ public class PostController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PostListResponse>> getList(
+    public ResponseEntity<PostWithPagingResponse> getList(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
             @RequestParam PostType type) {

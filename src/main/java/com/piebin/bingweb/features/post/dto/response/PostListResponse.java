@@ -16,6 +16,8 @@ public record PostListResponse(
         Long authorIdx,
         String authorNickname,
         String title,
+        int viewCount,
+        int commentCount,
         @BingDateTimeFormat
         LocalDateTime createdAt,
         @BingDateTimeFormat
@@ -28,6 +30,8 @@ public record PostListResponse(
                 .authorIdx(author.getIdx())
                 .authorNickname(author.getNickname())
                 .title(post.getTitle())
+                .viewCount(0)
+                .commentCount(0)
                 .createdAt(post.getCreatedAt())
                 .updatedAt(post.getUpdatedAt())
                 .build();
