@@ -23,7 +23,7 @@ public class Post {
     private Long idx;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_idx")
+    @JoinColumn(name = "author_idx")
     private Account author;
 
     @Column(nullable = false, length = 200)

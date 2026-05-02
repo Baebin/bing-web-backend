@@ -6,14 +6,14 @@ import lombok.Builder;
 
 @Builder
 public record PostDto(
-        Long accountIdx,
+        Long authorIdx,
         String title,
         String content,
         PostType type
 ) {
-    public static PostDto from(Long accountIdx, PostRequest request) {
+    public static PostDto from(Long authorIdx, PostRequest request) {
         return PostDto.builder()
-                .accountIdx(accountIdx)
+                .authorIdx(authorIdx)
                 .title(request.getTitle())
                 .content(request.getContent())
                 .type(request.getType())
