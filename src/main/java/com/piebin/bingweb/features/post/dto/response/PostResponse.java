@@ -1,5 +1,6 @@
 package com.piebin.bingweb.features.post.dto.response;
 
+import com.piebin.bingweb.features.post.common.PostType;
 import com.piebin.bingweb.features.post.domain.Post;
 import com.piebin.bingweb.global.annotation.BingDateTimeFormat;
 import com.piebin.bingweb.global.domain.Account;
@@ -17,6 +18,7 @@ public record PostResponse(
         String authorNickname,
         String title,
         String content,
+        PostType type,
         @BingDateTimeFormat
         LocalDateTime createdAt,
         @BingDateTimeFormat
@@ -30,6 +32,7 @@ public record PostResponse(
                 .authorNickname(author.getNickname())
                 .title(post.getTitle())
                 .content(post.getContent())
+                .type(post.getType())
                 .createdAt(post.getCreatedAt())
                 .updatedAt(post.getUpdatedAt())
                 .build();
