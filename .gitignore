@@ -44,3 +44,6 @@ out/
 
 ### Seucurity Configuration ###
 /src/main/resources/application-security.properties
+
+### Etc Configuration ###
+/src/main/resources/application-etc.properties
