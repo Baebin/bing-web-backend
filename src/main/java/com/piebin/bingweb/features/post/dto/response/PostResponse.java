@@ -19,12 +19,16 @@ public record PostResponse(
         String title,
         String content,
         PostType type,
+        int viewCount,
+        int likeCount,
+        int commentCount,
+        boolean isLiked,
         @BingDateTimeFormat
         LocalDateTime createdAt,
         @BingDateTimeFormat
         LocalDateTime updatedAt
 ) {
-    public static PostResponse from(Post post) {
+    public static PostResponse from(Post post, boolean isLiked) {
         Account author = post.getAuthor();
         return PostResponse.builder()
                 .idx(post.getIdx())
@@ -33,6 +37,10 @@ public record PostResponse(
                 .title(post.getTitle())
                 .content(post.getContent())
                 .type(post.getType())
+                .viewCount(post.getViewCount())
+                .likeCount(post.getLikeCount())
+                .commentCount(post.getCommentCount())
+                .isLiked(isLiked)
                 .createdAt(post.getCreatedAt())
                 .updatedAt(post.getUpdatedAt())
                 .build();

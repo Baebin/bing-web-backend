@@ -7,6 +7,7 @@ import com.piebin.bingweb.features.post.dto.internal.PostDto;
 import com.piebin.bingweb.features.post.dto.response.PostResponse;
 import com.piebin.bingweb.features.post.dto.response.PostWithPagingResponse;
 import com.piebin.bingweb.features.post.exception.PostException;
+import com.piebin.bingweb.features.post.repository.PostLikeRepository;
 import com.piebin.bingweb.features.post.repository.PostRepository;
 import com.piebin.bingweb.features.post.service.PostService;
 import com.piebin.bingweb.global.domain.Account;
@@ -24,6 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
+    private final PostLikeRepository postLikeRepository;
+
     private final AccountRepository accountRepository;
 
     @Override
@@ -31,7 +34,6 @@ public class PostServiceImpl implements PostService {
     public void upload(PostDto dto) {
         Account author = accountRepository.findByIdx(dto.authorIdx())
                 .orElseThrow(() -> new CustomException(AccountException.USER_NOT_FOUND));
-        ;
         postRepository.save(
                 Post.builder()
                         .author(author)
@@ -43,11 +45,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public PostResponse get(Long idx) {
-        Post post = postRepository.findByIdx(idx)
+    @Transactional
+    public PostResponse get(Long postIdx, Long accountIdx) {
+        postRepository.incrementViewCount(postIdx);
+        Post post = postRepository.findByIdx(postIdx)
                 .orElseThrow(() -> new CustomException(PostException.POST_NOT_FOUND));
-        return PostResponse.from(post);
+        boolean isLiked = (accountIdx == null ? false : postLikeRepository.existsByPostIdxAndAccountIdx(postIdx, accountIdx));
+        return PostResponse.from(post, isLiked);
     }
 
     @Override

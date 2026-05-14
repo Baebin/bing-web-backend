@@ -32,9 +32,11 @@ public class PostController {
 
     @GetMapping("/{idx}")
     public ResponseEntity<PostResponse> get(
+            @AuthenticationPrincipal SecurityAccount securityAccount,
             @PathVariable Long idx) {
+        Long accountIdx = (securityAccount == null ? null : securityAccount.account().getIdx());
         return ResponseEntity.ok(
-                postService.get(idx)
+                postService.get(idx, accountIdx)
         );
     }
 

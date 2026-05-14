@@ -4,6 +4,7 @@ import com.piebin.bingweb.features.post.common.PostType;
 import com.piebin.bingweb.global.domain.Account;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Formula;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -35,6 +36,16 @@ public class Post {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PostType type;
+
+    @Builder.Default
+    @Column(nullable = false)
+    private Integer viewCount = 0;
+
+    @Formula("(select count(*) from post_likes pl where pl.post_idx = idx)")
+    private Integer likeCount;
+
+    @Formula("(select count(*) from comments c where c.post_idx = idx)")
+    private Integer commentCount;
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)

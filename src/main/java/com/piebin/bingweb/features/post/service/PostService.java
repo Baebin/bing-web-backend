@@ -8,6 +8,6 @@ import com.piebin.bingweb.features.post.dto.response.PostWithPagingResponse;
 public interface PostService {
     void upload(PostDto dto);
 
-    PostResponse get(Long idx);
+    PostResponse get(Long postIdx, Long accountIdx);
     PostWithPagingResponse getList(PostType type, int page, int size);
 }
