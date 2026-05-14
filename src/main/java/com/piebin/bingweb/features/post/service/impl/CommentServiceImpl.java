@@ -82,4 +82,15 @@ public class CommentServiceImpl implements CommentService {
         }
         return CommentWithPagingResponse.of(result, isLast);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public CommentWithPagingResponse getListUntil(Long postIdx, Long lastParentIdx) {
+        List<Comment> parents = commentRepository.findParentsUntil(postIdx, lastParentIdx);
+        List<CommentResponse> result = parents.stream()
+                .map(p -> CommentResponse.from(p, bingUrlProvider))
+                .toList();
+        boolean isLast = (result.size() == commentRepository.countByPostIdxAndParentIsNull(postIdx));
+        return CommentWithPagingResponse.of(result, isLast);
+    }
 }

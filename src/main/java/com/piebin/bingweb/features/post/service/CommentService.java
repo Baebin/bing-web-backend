@@ -9,4 +9,5 @@ public interface CommentService {
 
     CommentResponse get(Long commentIdx, Long postIdx);
     CommentWithPagingResponse getList(Long postIdx, Long lastParentIdx);
+    CommentWithPagingResponse getListUntil(Long postIdx, Long lastParentIdx);
 }

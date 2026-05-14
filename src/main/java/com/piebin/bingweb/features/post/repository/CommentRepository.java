@@ -1,7 +1,6 @@
 package com.piebin.bingweb.features.post.repository;
 
 import com.piebin.bingweb.features.post.domain.Comment;
-import com.piebin.bingweb.features.post.domain.Post;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,7 +12,7 @@ import java.util.Optional;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-    int countByPostIdx(Long idx);
+    int countByPostIdxAndParentIsNull(Long idx);
 
     Optional<Comment> findByIdx(Long idx);
     Optional<Comment> findByIdxAndPostIdx(Long idx, Long postIdx);
@@ -23,10 +22,21 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
         join fetch c.author
         where c.post.idx = :postIdx
             and c.parent is null
-            and (:lastIdx is null or c.idx > :lastIdx)
-        order by c.idx asc
+            and (:lastIdx is null or c.idx < :lastIdx)
+        order by c.idx desc
     """)
     List<Comment> findParents(@Param("postIdx") Long postIdx,
                               @Param("lastIdx") Long lastIdx,
                               Pageable pageable);
+
+    @Query("""
+        select c from Comment c
+        join fetch c.author
+        where c.post.idx = :postIdx
+            and c.parent is null
+            and (:lastIdx is null or c.idx >= :lastIdx)
+        order by c.idx desc
+    """)
+    List<Comment> findParentsUntil(@Param("postIdx") Long postIdx,
+                                   @Param("lastIdx") Long lastIdx);
 }

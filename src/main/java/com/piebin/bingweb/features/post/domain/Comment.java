@@ -39,6 +39,7 @@ public class Comment {
     private Comment parent;
 
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("idx desc")
     private List<Comment> children = new ArrayList<>();
 
     @Column(nullable = false, length = 200)

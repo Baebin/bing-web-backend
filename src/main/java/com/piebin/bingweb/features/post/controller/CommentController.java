@@ -41,9 +41,11 @@ public class CommentController {
     @GetMapping
     public ResponseEntity<CommentWithPagingResponse> getList(
             @PathVariable Long postIdx,
-            @RequestParam(name = "last-parent-idx", required = false) Long lastParentIdx) {
+            @RequestParam(name = "last-parent-idx", required = false) Long lastParentIdx,
+            @RequestParam( defaultValue = "false") boolean until) {
         return ResponseEntity.ok(
-                commentService.getList(postIdx, lastParentIdx)
+                until ? commentService.getListUntil(postIdx, lastParentIdx)
+                        : commentService.getList(postIdx, lastParentIdx)
         );
     }
 }
